@@ -130,9 +130,22 @@ export default function Desktop() {
     <div className="vapor-bg scanlines relative h-screen w-screen overflow-hidden">
       <div className="vapor-sun" />
       <div className="vapor-grid-floor" />
+      <div className="vapor-road-wrap" aria-hidden>
+        <div className="vapor-road">
+          <div className="vapor-road-dashes" />
+        </div>
+      </div>
+      <div className="vapor-car" aria-hidden>
+        <div className="car-glow" />
+        <div className="car-body">
+          <div className="car-cabin" />
+          <div className="car-light left" />
+          <div className="car-light right" />
+        </div>
+        <div className="car-wheel left" />
+        <div className="car-wheel right" />
+      </div>
       <ParticleField />
-      {/* palm silhouette glow */}
-      <div className="absolute bottom-10 w-full text-center text-white/25 text-5xl tracking-[0.5em] pointer-events-none select-none">🌴 ＡＥＳＴＨＥＴＩＣ 🌴</div>
 
       {/* Desktop icons */}
       <div className={`absolute top-4 left-4 z-[5] ${isMobile ? "grid grid-cols-3 gap-2 right-4" : "flex flex-col gap-4 w-24"}`}>
