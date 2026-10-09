@@ -20,159 +20,323 @@ html, body {
     linear-gradient(to bottom, #0b0033 0%, #3b0a6e 28%, #b967ff 52%, #ff71ce 68%, #fffb96 100%);
 }
 
-.vapor-sun {
+/* --- Recreated synthwave scene: sky, striped sun, grid highway --- */
+.scene {
+  --hz: 40vh;
+  --sun: clamp(150px, 25vh, 320px);
+  --travel: 62vh;
   position: absolute;
-  left: 50%;
-  top: 22%;
-  transform: translateX(-50%);
-  width: min(58vmin, 420px);
-  height: min(58vmin, 420px);
-  border-radius: 9999px;
-  background: linear-gradient(to bottom, #fffb96 0%, #ffd319 30%, #ff2975 65%, #8c1eff 100%);
-  box-shadow: 0 0 80px 20px rgba(255, 41, 117, 0.55);
+  inset: 0;
   overflow: hidden;
-}
-.vapor-sun::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0 14px,
-    #2a0a4a 14px 18px,
-    transparent 18px 26px
-  );
-  margin-top: 45%;
-  opacity: 0.9;
-}
-
-.vapor-grid-floor {
-  position: absolute;
-  left: -25%;
-  right: -25%;
-  bottom: -8%;
-  height: 46%;
-  background-image:
-    linear-gradient(transparent 95%, #01cdfe 100%),
-    linear-gradient(90deg, transparent 95%, #01cdfe 100%);
-  background-size: 48px 32px;
-  transform: perspective(420px) rotateX(62deg);
-  opacity: 0.85;
-  animation: gridScroll 2.2s linear infinite;
-  mask-image: linear-gradient(to top, black 60%, transparent 100%);
-}
-@keyframes gridScroll {
-  from { background-position-y: 0; }
-  to { background-position-y: 32px; }
-}
-
-/* --- Vaporwave highway to the horizon --- */
-.vapor-road-wrap {
-  position: absolute;
-  left: 50%;
-  bottom: -4%;
-  height: 46%;
-  width: min(130vmin, 960px);
-  transform: translateX(-50%);
-  filter: drop-shadow(0 0 10px rgba(1, 205, 254, 0.8));
   pointer-events: none;
 }
-.vapor-road {
+.scene-sky {
   position: absolute;
   inset: 0;
-  clip-path: polygon(41% 0, 59% 0, 100% 100%, 0 100%);
-  background: linear-gradient(to bottom, #241335 0%, #17102a 45%, #0d0918 100%);
+  background: radial-gradient(ellipse 90% 55% at 50% 38%, #a83ac8 0%, #6d1da0 32%, #3c116f 58%, #1e0745 100%);
 }
-.vapor-road-dashes {
+/* striped sun — the gaps are transparent so the real sky shows through */
+.scene-sun {
   position: absolute;
   left: 50%;
-  top: 0;
-  bottom: 0;
-  width: clamp(6px, 1.4vmin, 14px);
+  bottom: calc(60vh - 8px);
+  width: var(--sun);
+  height: var(--sun);
   transform: translateX(-50%);
-  clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%);
-  background: repeating-linear-gradient(
-    to bottom,
-    #fffb96 0 22px,
-    transparent 22px 52px
-  );
-  filter: drop-shadow(0 0 6px rgba(255, 251, 150, 0.9));
-  animation: roadmove 0.7s linear infinite;
+  border-radius: 50%;
+  background: linear-gradient(to bottom,
+    #fff7c4 0%, #ffe763 13%, #ffb84c 25%,
+    transparent 25%, transparent 27%,
+    #ff9a55 27%, #ff7f60 37%,
+    transparent 37%, transparent 39.5%,
+    #ff6670 39.5%, #ff4d88 50%,
+    transparent 50%, transparent 53%,
+    #ff3d99 53%, #ff2fa6 63%,
+    transparent 63%, transparent 67%,
+    #ff28ad 67%, #ff20b5 76%,
+    transparent 76%, transparent 81%,
+    #ff1fba 81%, #f818bd 89%,
+    transparent 89%, transparent 95%,
+    #e80fb8 95%, #c00aa0 100%);
 }
-@keyframes roadmove {
-  from { background-position-y: 0; }
-  to { background-position-y: 52px; }
-}
-
-/* --- Little driver heading into the sun --- */
-.vapor-car {
+.scene-sunglow {
   position: absolute;
   left: 50%;
-  bottom: 39%;
-  width: 104px;
-  height: 52px;
-  transform: translateX(-50%);
-  animation: carbob 0.9s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 1;
+  bottom: calc(60vh - 8px - var(--sun) / 2);
+  width: calc(var(--sun) * 2.4);
+  aspect-ratio: 1;
+  transform: translate(-50%, 50%);
+  background: radial-gradient(circle, rgba(255, 90, 190, 0.55) 0%, rgba(255, 60, 160, 0.18) 45%, transparent 70%);
+  animation: sunglowpulse 7s ease-in-out infinite;
 }
-@keyframes carbob {
-  0%, 100% { margin-bottom: 0; }
-  50% { margin-bottom: 3px; }
+@keyframes sunglowpulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
 }
-.car-glow {
-  position: absolute;
-  left: 50%;
-  bottom: -8px;
-  width: 130px;
-  height: 22px;
-  transform: translateX(-50%);
-  background: radial-gradient(ellipse, rgba(255, 41, 117, 0.65) 0%, transparent 70%);
-  filter: blur(2px);
-}
-.car-body {
+/* magenta haze sitting on the horizon */
+.scene-haze {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 8px;
-  height: 30px;
-  border-radius: 10px 10px 5px 5px;
-  background: linear-gradient(to bottom, #3b1d5e 0%, #1c1030 60%, #120b20 100%);
-  border: 1px solid rgba(255, 113, 206, 0.7);
+  top: calc(var(--hz) - 11vh);
+  height: 22vh;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255, 70, 170, 0.35), transparent 70%);
 }
-.car-cabin {
+/* bright line where the sun meets the road */
+.scene-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--hz) - 13px);
+  height: 26px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 80, 175, 0.35) 35%, rgba(255, 225, 250, 0.8) 50%, rgba(255, 80, 175, 0.35) 65%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 22%, black 78%, transparent);
+}
+
+/* ground plane: terrain, road, longitudinal grid + mountains */
+.scene-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.road-streak {
+  animation: streakpulse 4s ease-in-out infinite;
+}
+@keyframes streakpulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.9; }
+}
+
+/* transverse grid rows streaming toward the viewer */
+.scene-rows {
+  position: absolute;
+  inset: 0;
+}
+.scene-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--hz);
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(150, 190, 255, 0.6) 15%, rgba(150, 190, 255, 0.6) 85%, transparent);
+  animation: rowdrop 2.8s linear infinite;
+  opacity: 0;
+}
+@keyframes rowdrop {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { transform: translateY(calc(var(--travel) * 0.01)); opacity: 1; }
+  20% { transform: translateY(calc(var(--travel) * 0.04)); opacity: 1; }
+  30% { transform: translateY(calc(var(--travel) * 0.09)); opacity: 1; }
+  40% { transform: translateY(calc(var(--travel) * 0.16)); opacity: 1; }
+  50% { transform: translateY(calc(var(--travel) * 0.25)); opacity: 1; }
+  60% { transform: translateY(calc(var(--travel) * 0.36)); opacity: 1; }
+  70% { transform: translateY(calc(var(--travel) * 0.49)); opacity: 1; }
+  80% { transform: translateY(calc(var(--travel) * 0.64)); opacity: 1; }
+  90% { transform: translateY(calc(var(--travel) * 0.81)); opacity: 1; }
+  100% { transform: translateY(var(--travel)); opacity: 1; }
+}
+
+/* center lane dashes flowing down the road, in sync with the grid */
+.road-dashes {
+  --dashw: 14px;
+  --dashh: 46px;
+  position: absolute;
+  inset: 0;
+}
+.road-dash {
   position: absolute;
   left: 50%;
-  top: -11px;
-  width: 52px;
-  height: 16px;
+  top: var(--hz);
+  translate: -50% 0;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, #fff3c4, #ffd76e);
+  box-shadow: 0 0 8px 2px rgba(255, 210, 120, 0.55);
+  animation: dashmove 2.8s linear infinite;
+  opacity: 0;
+}
+@keyframes dashmove {
+  0% { transform: translateY(0); width: 0; height: 0; opacity: 0; }
+  10% { transform: translateY(calc(var(--travel) * 0.01)); width: calc(var(--dashw) * 0.1); height: calc(var(--dashh) * 0.032); opacity: 1; }
+  20% { transform: translateY(calc(var(--travel) * 0.04)); width: calc(var(--dashw) * 0.2); height: calc(var(--dashh) * 0.089); opacity: 1; }
+  30% { transform: translateY(calc(var(--travel) * 0.09)); width: calc(var(--dashw) * 0.3); height: calc(var(--dashh) * 0.164); opacity: 1; }
+  40% { transform: translateY(calc(var(--travel) * 0.16)); width: calc(var(--dashw) * 0.4); height: calc(var(--dashh) * 0.253); opacity: 1; }
+  50% { transform: translateY(calc(var(--travel) * 0.25)); width: calc(var(--dashw) * 0.5); height: calc(var(--dashh) * 0.354); opacity: 1; }
+  60% { transform: translateY(calc(var(--travel) * 0.36)); width: calc(var(--dashw) * 0.6); height: calc(var(--dashh) * 0.465); opacity: 1; }
+  70% { transform: translateY(calc(var(--travel) * 0.49)); width: calc(var(--dashw) * 0.7); height: calc(var(--dashh) * 0.586); opacity: 1; }
+  80% { transform: translateY(calc(var(--travel) * 0.64)); width: calc(var(--dashw) * 0.8); height: calc(var(--dashh) * 0.716); opacity: 1; }
+  90% { transform: translateY(calc(var(--travel) * 0.81)); width: calc(var(--dashw) * 0.9); height: calc(var(--dashh) * 0.854); opacity: 1; }
+  100% { transform: translateY(var(--travel)); width: var(--dashw); height: var(--dashh); opacity: 1; }
+}
+
+/* roadside palms rushing past, planted just outside the road edges */
+.road-palms {
+  --palmw: 500px;
+  --palmh: 600px;
+  position: absolute;
+  inset: 0;
+}
+.road-palm {
+  position: absolute;
+  top: var(--hz);
+  translate: -50% -100%;
+  width: 14px;
+  height: 20px;
+  animation: palmrideR 2.8s linear infinite;
+  opacity: 0;
+}
+.road-palm-l { left: 49.5%; animation-name: palmrideL; }
+.road-palm-r { left: 50.5%; }
+@keyframes palmrideL {
+  0% { transform: translateY(0); left: 49.5%; width: 0; height: 0; opacity: 0; }
+  10% { transform: translateY(calc(var(--travel) * 0.01)); left: 45.65%; width: calc(var(--palmw) * 0.1); height: calc(var(--palmh) * 0.1); opacity: 1; }
+  20% { transform: translateY(calc(var(--travel) * 0.04)); left: 41.8%; width: calc(var(--palmw) * 0.2); height: calc(var(--palmh) * 0.2); opacity: 1; }
+  30% { transform: translateY(calc(var(--travel) * 0.09)); left: 37.95%; width: calc(var(--palmw) * 0.3); height: calc(var(--palmh) * 0.3); opacity: 1; }
+  40% { transform: translateY(calc(var(--travel) * 0.16)); left: 34.1%; width: calc(var(--palmw) * 0.4); height: calc(var(--palmh) * 0.4); opacity: 1; }
+  50% { transform: translateY(calc(var(--travel) * 0.25)); left: 30.25%; width: calc(var(--palmw) * 0.5); height: calc(var(--palmh) * 0.5); opacity: 1; }
+  60% { transform: translateY(calc(var(--travel) * 0.36)); left: 26.4%; width: calc(var(--palmw) * 0.6); height: calc(var(--palmh) * 0.6); opacity: 1; }
+  70% { transform: translateY(calc(var(--travel) * 0.49)); left: 22.55%; width: calc(var(--palmw) * 0.7); height: calc(var(--palmh) * 0.7); opacity: 1; }
+  80% { transform: translateY(calc(var(--travel) * 0.64)); left: 18.7%; width: calc(var(--palmw) * 0.8); height: calc(var(--palmh) * 0.8); opacity: 1; }
+  90% { transform: translateY(calc(var(--travel) * 0.81)); left: 14.85%; width: calc(var(--palmw) * 0.9); height: calc(var(--palmh) * 0.9); opacity: 1; }
+  100% { transform: translateY(var(--travel)); left: 11%; width: var(--palmw); height: var(--palmh); opacity: 1; }
+}
+@keyframes palmrideR {
+  0% { transform: translateY(0); left: 50.5%; width: 0; height: 0; opacity: 0; }
+  10% { transform: translateY(calc(var(--travel) * 0.01)); left: 54.35%; width: calc(var(--palmw) * 0.1); height: calc(var(--palmh) * 0.1); opacity: 1; }
+  20% { transform: translateY(calc(var(--travel) * 0.04)); left: 58.2%; width: calc(var(--palmw) * 0.2); height: calc(var(--palmh) * 0.2); opacity: 1; }
+  30% { transform: translateY(calc(var(--travel) * 0.09)); left: 62.05%; width: calc(var(--palmw) * 0.3); height: calc(var(--palmh) * 0.3); opacity: 1; }
+  40% { transform: translateY(calc(var(--travel) * 0.16)); left: 65.9%; width: calc(var(--palmw) * 0.4); height: calc(var(--palmh) * 0.4); opacity: 1; }
+  50% { transform: translateY(calc(var(--travel) * 0.25)); left: 69.75%; width: calc(var(--palmw) * 0.5); height: calc(var(--palmh) * 0.5); opacity: 1; }
+  60% { transform: translateY(calc(var(--travel) * 0.36)); left: 73.6%; width: calc(var(--palmw) * 0.6); height: calc(var(--palmh) * 0.6); opacity: 1; }
+  70% { transform: translateY(calc(var(--travel) * 0.49)); left: 77.45%; width: calc(var(--palmw) * 0.7); height: calc(var(--palmh) * 0.7); opacity: 1; }
+  80% { transform: translateY(calc(var(--travel) * 0.64)); left: 81.3%; width: calc(var(--palmw) * 0.8); height: calc(var(--palmh) * 0.8); opacity: 1; }
+  90% { transform: translateY(calc(var(--travel) * 0.81)); left: 85.15%; width: calc(var(--palmw) * 0.9); height: calc(var(--palmh) * 0.9); opacity: 1; }
+  100% { transform: translateY(var(--travel)); left: 89%; width: var(--palmw); height: var(--palmh); opacity: 1; }
+}
+
+/* --- Page-wide retrowave grade (sits above everything, clicks pass through) --- */
+.fx {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  overflow: hidden;
+}
+.fx-tint {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: overlay;
+  opacity: 0.65;
+  background: linear-gradient(to bottom, rgba(255, 60, 180, 0.4) 0%, rgba(80, 0, 160, 0.2) 35%, rgba(0, 220, 255, 0.24) 75%, rgba(255, 60, 180, 0.36) 100%);
+}
+.fx-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -140px;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.09) 45%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.09) 55%, transparent);
+  animation: fxband 7s linear infinite;
+}
+@keyframes fxband {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(100vh + 280px)); }
+}
+.fx-scan {
+  position: absolute;
+  inset: 0;
+  opacity: 0.8;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0 1px, transparent 1px 3px);
+}
+.fx-grain {
+  position: absolute;
+  inset: -100px;
+  opacity: 0.1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: fxgrain 0.6s steps(3) infinite;
+}
+@keyframes fxgrain {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-40px, 25px); }
+  66% { transform: translate(30px, -35px); }
+  100% { transform: translate(0, 0); }
+}
+.fx-vig {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 115% 100% at 50% 45%, transparent 52%, rgba(8, 0, 24, 0.55) 100%);
+}
+
+/* --- 3D-style DeLorean cruising into the sunset --- */
+.scene-car {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--hz) + 10vh);
+  width: clamp(160px, 24vw, 250px);
   transform: translateX(-50%);
-  border-radius: 8px 8px 3px 3px;
-  background: linear-gradient(to bottom, rgba(1, 205, 254, 0.9), rgba(1, 205, 254, 0.35));
-  border: 1px solid rgba(1, 205, 254, 0.9);
+  animation: carbob 0.9s ease-in-out infinite, carsway 4.4s ease-in-out infinite;
 }
-.car-light {
+@keyframes carbob {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -3px; }
+}
+@keyframes carsway {
+  0%, 100% { margin-left: -5px; }
+  50% { margin-left: 5px; }
+}
+.dlo-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+.dlo-glowpulse {
+  animation: glowpulse 2.2s ease-in-out infinite;
+}
+@keyframes glowpulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.9; }
+}
+.dlo-lens {
+  animation: lightflicker 3.2s ease-in-out infinite;
+}
+@keyframes lightflicker {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.15); }
+}
+.scar-reflect {
+  height: 56px;
+  overflow: hidden;
+  transform: scaleY(-1);
+  opacity: 0.45;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
+}
+
+/* --- Palm silhouettes on the ridges --- */
+.scene-palm-wrap {
   position: absolute;
-  bottom: 6px;
-  width: 12px;
-  height: 6px;
-  border-radius: 3px;
-  background: #ff2244;
-  box-shadow: 0 0 8px 3px rgba(255, 34, 68, 0.9);
 }
-.car-light.left { left: 8px; }
-.car-light.right { right: 8px; }
-.car-wheel {
+.scene-palm {
+  width: 100%;
+  height: 100%;
+  max-width: 520px;
+  max-height: 630px;
+  transform-origin: 50% 100%;
+  animation: palmsway 5s ease-in-out infinite;
+}
+@keyframes palmsway {
+  0%, 100% { transform: rotate(-1.3deg); }
+  50% { transform: rotate(1.3deg); }
+}
+
+/* --- Cinematic vignette --- */
+.scene-vignette {
   position: absolute;
-  bottom: 0;
-  width: 18px;
-  height: 18px;
-  border-radius: 9999px;
-  background: radial-gradient(circle, #555 0 4px, #0a0a0a 5px);
-  border: 1px solid #333;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, transparent 60%, rgba(10, 2, 28, 0.45) 100%),
+    radial-gradient(ellipse 120% 100% at 50% 45%, transparent 55%, rgba(12, 2, 32, 0.5) 100%);
 }
-.car-wheel.left { left: 12px; }
-.car-wheel.right { right: 12px; }
 
 /* --- XP Window chrome --- */
 .xp-window {

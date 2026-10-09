@@ -12,7 +12,6 @@ export const portfolio = {
   about: `Sup! I build and code things to help me either get one step closer to my dreams or to just have fun in life. I specialize in Python, C#, C++, Javascript, SQLite and many more. When im not coding or building things, I try and get away from the bad things in life. Whether that's working out on the gym every weekdays, playing all sorts of video games, appreciating all sorts of music or enjoying the small details of life.`,
 
   highlights: [
-    "⚡ 3+ years building web apps",
     "🎨 Obsessed with UI detail & retro aesthetics",
     "🌐 Open source contributor",
   ],

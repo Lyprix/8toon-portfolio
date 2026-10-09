@@ -122,11 +122,11 @@ export default function MusicPlayer() {
   return (
     <button
       onClick={(e) => { e.stopPropagation(); toggle(); }}
-      title={playing ? `Pause music (${mode === "file" ? "bgm.mp3" : "synthwave loop"})` : "Play music"}
+      title={playing ? "Pause — Empty Room by Strawberry 3000 (loop)" : "Play — Empty Room by Strawberry 3000 (loop)"}
       className="flex items-center gap-1 px-2 text-white text-xs hover:bg-white/10 border-l border-white/30"
     >
       <span className={playing ? "animate-pulse" : ""}>{playing ? "🔊" : "🔇"}</span>
-      <span className="hidden md:inline text-[10px]">{mode === "file" ? "bgm" : "synth"}</span>
+      <span className="hidden md:inline text-[10px]">{mode === "file" ? "Empty Room" : "synth"}</span>
     </button>
   );
 }

@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import XPWindow from "@/components/XPWindow";
 import ParticleField from "@/components/ParticleField";
+import SceneBackground from "@/components/SceneBackground";
+import VaporFilter from "@/components/VaporFilter";
 import BootScreen from "@/components/BootScreen";
 import MusicPlayer from "@/components/MusicPlayer";
 import { HomeContent, AboutContent, ProjectsContent, SkillsContent, AchievementsContent, ContactContent } from "@/components/WindowContents";
@@ -128,23 +130,7 @@ export default function Desktop() {
 
   return (
     <div className="vapor-bg scanlines relative h-screen w-screen overflow-hidden">
-      <div className="vapor-sun" />
-      <div className="vapor-grid-floor" />
-      <div className="vapor-road-wrap" aria-hidden>
-        <div className="vapor-road">
-          <div className="vapor-road-dashes" />
-        </div>
-      </div>
-      <div className="vapor-car" aria-hidden>
-        <div className="car-glow" />
-        <div className="car-body">
-          <div className="car-cabin" />
-          <div className="car-light left" />
-          <div className="car-light right" />
-        </div>
-        <div className="car-wheel left" />
-        <div className="car-wheel right" />
-      </div>
+      <SceneBackground />
       <ParticleField />
 
       {/* Desktop icons */}
@@ -245,6 +231,7 @@ export default function Desktop() {
         <button onClick={shutdown} title="Shut down" className="hidden sm:flex items-center px-2 text-white/90 hover:text-white hover:bg-white/10 text-sm">⏻</button>
         <div className="flex items-center gap-1 px-3 text-white text-xs bg-[#1290e9] border-l border-white/30 shadow-[inset_1px_0_3px_rgba(0,0,0,0.4)]">🔊 {clock}</div>
       </div>
+      <VaporFilter />
     </div>
   );
 }
