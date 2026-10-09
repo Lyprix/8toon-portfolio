@@ -1,6 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import XPWindow from "@/components/XPWindow";
+import ParticleField from "@/components/ParticleField";
+import BootScreen from "@/components/BootScreen";
+import MusicPlayer from "@/components/MusicPlayer";
 import { HomeContent, AboutContent, ProjectsContent, SkillsContent, AchievementsContent, ContactContent } from "@/components/WindowContents";
 import { portfolio } from "@/data/portfolio";
 
@@ -54,6 +58,7 @@ export default function Desktop() {
   const [startOpen, setStartOpen] = useState(false);
   const [shuttingDown, setShuttingDown] = useState(false);
   const [off, setOff] = useState(false);
+  const [booted, setBooted] = useState(false);
   const clock = useClock();
   const isMobile = useIsMobile();
 
@@ -95,6 +100,10 @@ export default function Desktop() {
     }
   };
 
+  if (!booted) {
+    return <BootScreen onDone={() => setBooted(true)} />;
+  }
+
   if (off) {
     return (
       <div className="h-screen w-screen bg-black flex flex-col items-center justify-center text-center p-6 cursor-pointer" onClick={reboot}>
@@ -121,25 +130,30 @@ export default function Desktop() {
     <div className="vapor-bg scanlines relative h-screen w-screen overflow-hidden">
       <div className="vapor-sun" />
       <div className="vapor-grid-floor" />
+      <ParticleField />
       {/* palm silhouette glow */}
       <div className="absolute bottom-10 w-full text-center text-white/25 text-5xl tracking-[0.5em] pointer-events-none select-none">🌴 ＡＥＳＴＨＥＴＩＣ 🌴</div>
 
       {/* Desktop icons */}
       <div className={`absolute top-4 left-4 z-[5] ${isMobile ? "grid grid-cols-3 gap-2 right-4" : "flex flex-col gap-4 w-24"}`}>
         {ICONS.map((ic) => (
-          <button
+          <motion.button
             key={ic.id}
             onDoubleClick={() => openWindow(ic.id)}
             onClick={() => openWindow(ic.id)}
             className="desktop-icon flex flex-col items-center gap-1 group"
+            whileHover={{ scale: 1.1, rotate: -2 }}
+            whileTap={{ scale: 0.92 }}
+            transition={{ type: "spring", stiffness: 500, damping: 18 }}
           >
             <span className="icon-bg text-4xl p-1.5 rounded-sm transition-colors drop-shadow-[2px_2px_2px_rgba(0,0,0,0.7)]">{ic.icon}</span>
             <span className="text-white text-[11px] text-center leading-tight drop-shadow-[1px_1px_1px_black] px-1">{ic.title}<br /><span className="opacity-70 text-[9px]">{isMobile ? "" : ic.file}</span></span>
-          </button>
+          </motion.button>
         ))}
       </div>
 
       {/* Windows */}
+      <AnimatePresence>
       {open.map((id, i) => {
         if (minimized.has(id)) return null;
         const meta = ICONS.find((x) => x.id === id)!;
@@ -162,10 +176,18 @@ export default function Desktop() {
           </XPWindow>
         );
       })}
+      </AnimatePresence>
 
       {/* Start menu */}
+      <AnimatePresence>
       {startOpen && (
-        <div className="absolute bottom-10 left-0 z-[100] w-64 window-open">
+        <motion.div
+          className="absolute bottom-10 left-0 z-[100] w-64"
+          initial={{ opacity: 0, y: 16, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 10, scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 500, damping: 32 }}
+        >
           <div className="bg-[#245edb] text-white font-bold px-3 py-2 flex items-center gap-2 rounded-tr-lg">
             <span className="w-8 h-8 rounded-sm bg-gradient-to-br from-[#ff71ce] to-[#01cdfe] flex items-center justify-center text-xl border border-white">👾</span>
             {portfolio.name}
@@ -180,8 +202,9 @@ export default function Desktop() {
           <div className="bg-[#245edb] px-3 py-2 flex justify-end gap-2 rounded-br-lg">
             <button onClick={shutdown} className="flex items-center gap-1 bg-[#e0664f] hover:brightness-110 text-white text-xs font-bold px-2 py-1 rounded border border-white/60">⏻ Turn Off</button>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* Taskbar */}
       <div className="xp-taskbar absolute bottom-0 left-0 right-0 h-10 flex items-stretch z-[90] shadow-[0_-2px_8px_rgba(0,0,0,0.5)]">
@@ -205,6 +228,7 @@ export default function Desktop() {
             );
           })}
         </div>
+        <MusicPlayer />
         <button onClick={shutdown} title="Shut down" className="hidden sm:flex items-center px-2 text-white/90 hover:text-white hover:bg-white/10 text-sm">⏻</button>
         <div className="flex items-center gap-1 px-3 text-white text-xs bg-[#1290e9] border-l border-white/30 shadow-[inset_1px_0_3px_rgba(0,0,0,0.4)]">🔊 {clock}</div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState, useEffect, ReactNode } from "react";
+import { motion } from "framer-motion";
 
 type Props = {
   id: string;
@@ -52,11 +53,15 @@ export default function XPWindow({
     : { left: pos.x, top: pos.y, width: w, height: h, zIndex: z };
 
   return (
-    <div
+    <motion.div
       ref={ref}
       onMouseDown={() => onFocus(id)}
-      className="xp-window absolute flex flex-col window-open"
+      className="xp-window absolute flex flex-col"
       style={style}
+      initial={{ scale: 0.9, opacity: 0, y: 14 }}
+      animate={{ scale: 1, opacity: 1, y: 0 }}
+      exit={{ scale: 0.92, opacity: 0, y: 8 }}
+      transition={{ type: "spring", stiffness: 380, damping: 22 }}
     >
       <div
         onMouseDown={startDrag}
@@ -74,6 +79,6 @@ export default function XPWindow({
         </div>
       </div>
       <div className="xp-body flex-1 overflow-auto p-4 text-[13px] text-black min-h-0">{children}</div>
-    </div>
+    </motion.div>
   );
 }
