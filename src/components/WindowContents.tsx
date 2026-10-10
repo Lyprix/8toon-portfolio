@@ -107,6 +107,9 @@ export function AchievementsContent() {
           </div>
         </div>
       ))}
+      <div className="bg-[#0b0033] text-[#01cdfe] p-2 text-[11px] font-mono border-2 border-[#ff71ce]">
+        C:\achievements&gt; loading StillEarningTrophies.exe <span className="blink">█</span>
+      </div>
     </div>
   );
 }

@@ -8,16 +8,20 @@ import VaporFilter from "@/components/VaporFilter";
 import BootScreen from "@/components/BootScreen";
 import MusicPlayer from "@/components/MusicPlayer";
 import { HomeContent, AboutContent, ProjectsContent, SkillsContent, AchievementsContent, ContactContent } from "@/components/WindowContents";
+import { GamesContent } from "@/components/Games";
 import { portfolio } from "@/data/portfolio";
+import { playStartup, playShutdown } from "@/lib/sfx";
 
-type WinId = "home" | "about" | "projects" | "skills" | "achievements" | "contact";
+type WinId = "home" | "about" | "projects" | "skills" | "achievements" | "contact" | "games";
+type IconMeta = { id: WinId; title: string; icon: string; file: string };
 
-const ICONS: { id: WinId; title: string; icon: string; file: string }[] = [
+const ICONS: IconMeta[] = [
   { id: "home", title: "Home", icon: "🏠", file: "home.exe" },
   { id: "about", title: "About Me", icon: "👤", file: "about.txt" },
   { id: "projects", title: "Projects", icon: "📁", file: "projects" },
   { id: "skills", title: "Skills", icon: "💿", file: "skills.dll" },
   { id: "achievements", title: "Achievements", icon: "🏆", file: "awards.doc" },
+  { id: "games", title: "Games", icon: "🎮", file: "games.exe" },
   { id: "contact", title: "Contact", icon: "📬", file: "contact.eml" },
 ];
 
@@ -27,8 +31,25 @@ const TITLES: Record<WinId, string> = {
   projects: "📁 My Projects - Explorer",
   skills: "💿 Skills - Control Panel",
   achievements: "🏆 Achievements",
+  games: "🎮 Mini Games - Arcade",
   contact: "📬 Contact Me - Outlook",
 };
+
+function DeskIcon({ ic, onOpen, isMobile }: { ic: IconMeta; onOpen: (id: WinId) => void; isMobile: boolean }) {
+  return (
+    <motion.button
+      onDoubleClick={() => onOpen(ic.id)}
+      onClick={() => onOpen(ic.id)}
+      className="desktop-icon flex flex-col items-center gap-1 group"
+      whileHover={{ scale: 1.1, rotate: -2 }}
+      whileTap={{ scale: 0.92 }}
+      transition={{ type: "spring", stiffness: 500, damping: 18 }}
+    >
+      <span className="icon-bg text-4xl p-1.5 rounded-sm transition-colors drop-shadow-[2px_2px_2px_rgba(0,0,0,0.7)]">{ic.icon}</span>
+      <span className="text-white text-[11px] text-center leading-tight drop-shadow-[1px_1px_1px_black] px-1">{ic.title}<br /><span className="opacity-70 text-[9px]">{isMobile ? "" : ic.file}</span></span>
+    </motion.button>
+  );
+}
 
 function useClock() {
   const [now, setNow] = useState<Date | null>(null);
@@ -82,6 +103,7 @@ export default function Desktop() {
 
   const shutdown = () => {
     setStartOpen(false);
+    playShutdown();
     setShuttingDown(true);
     setTimeout(() => { setShuttingDown(false); setOff(true); }, 2600);
     try { window.close(); } catch { /* browsers block this — show our screen instead */ }
@@ -98,12 +120,13 @@ export default function Desktop() {
       case "projects": return <ProjectsContent />;
       case "skills": return <SkillsContent />;
       case "achievements": return <AchievementsContent />;
+      case "games": return <GamesContent />;
       case "contact": return <ContactContent />;
     }
   };
 
   if (!booted) {
-    return <BootScreen onDone={() => setBooted(true)} />;
+    return <BootScreen onDone={() => { setBooted(true); playStartup(); }} />;
   }
 
   if (off) {
@@ -135,21 +158,17 @@ export default function Desktop() {
 
       {/* Desktop icons */}
       <div className={`absolute top-4 left-4 z-[5] ${isMobile ? "grid grid-cols-3 gap-2 right-4" : "flex flex-col gap-4 w-24"}`}>
-        {ICONS.map((ic) => (
-          <motion.button
-            key={ic.id}
-            onDoubleClick={() => openWindow(ic.id)}
-            onClick={() => openWindow(ic.id)}
-            className="desktop-icon flex flex-col items-center gap-1 group"
-            whileHover={{ scale: 1.1, rotate: -2 }}
-            whileTap={{ scale: 0.92 }}
-            transition={{ type: "spring", stiffness: 500, damping: 18 }}
-          >
-            <span className="icon-bg text-4xl p-1.5 rounded-sm transition-colors drop-shadow-[2px_2px_2px_rgba(0,0,0,0.7)]">{ic.icon}</span>
-            <span className="text-white text-[11px] text-center leading-tight drop-shadow-[1px_1px_1px_black] px-1">{ic.title}<br /><span className="opacity-70 text-[9px]">{isMobile ? "" : ic.file}</span></span>
-          </motion.button>
+        {ICONS.filter((ic) => isMobile || ic.id !== "games").map((ic) => (
+          <DeskIcon key={ic.id} ic={ic} onOpen={openWindow} isMobile={isMobile} />
         ))}
       </div>
+
+      {/* Games pinned top-right on desktop */}
+      {!isMobile && (
+        <div className="absolute top-4 right-4 z-[5] w-24">
+          <DeskIcon ic={ICONS.find((x) => x.id === "games")!} onOpen={openWindow} isMobile={isMobile} />
+        </div>
+      )}
 
       {/* Windows */}
       <AnimatePresence>
@@ -163,7 +182,7 @@ export default function Desktop() {
             id={id}
             title={TITLES[id]}
             icon={meta.icon}
-            x={p.x} y={p.y} w={460} h={420}
+            x={p.x} y={p.y} w={id === "games" ? 540 : 460} h={id === "games" ? 520 : 420}
             z={zOf(id)}
             isMobile={isMobile}
             focused={focus === id}
